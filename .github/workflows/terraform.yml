@@ -48,6 +48,11 @@ jobs:
     - name: Terraform Format
       run: terraform fmt 
       working-directory: ${{env.ROOT_PATH}}
+           
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform plan -input=false
+      working-directory: ${{env.ROOT_PATH}}
       
     # Checkov static analysis tool   
     - uses: actions/checkout@v2
@@ -62,12 +67,7 @@ jobs:
       with:
         directory: ${{env.ROOT_PATH}}
         framework: terraform 
-      
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
-      working-directory: ${{env.ROOT_PATH}}
-
+ 
 
   terraform_apply:
     name: 'Terraform Apply Stage'
