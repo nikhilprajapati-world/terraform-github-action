@@ -32,7 +32,21 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
+      
+    # Checkov static analysis tool   
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+        
+    - name: Test with Checkov
+      id: checkov
+      uses: bridgecrewio/checkov-action@master
+      with:
+        directory: ${{env.ROOT_PATH}}
+        framework: terraform 
+ 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -54,20 +68,7 @@ jobs:
       run: terraform plan -input=false
       working-directory: ${{env.ROOT_PATH}}
       
-    # Checkov static analysis tool   
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-        
-    - name: Test with Checkov
-      id: checkov
-      uses: bridgecrewio/checkov-action@main
-      with:
-        directory: ${{env.ROOT_PATH}}
-        framework: terraform 
- 
+
 
   terraform_apply:
     name: 'Terraform Apply Stage'
